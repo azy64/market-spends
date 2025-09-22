@@ -11,15 +11,23 @@ type Item = {
     addedDate: string;
     category: string;
 }
+type ShoppingList = {
+    id: string;
+    name: string;
+    items: Array<Item>;
+    createdAt: string;
+    totalAmount: number;
+}
 const useMarketStore = create(devtools(persistStorage((set, get) => ({
     market: {
-        incomes: [],
-        rentAndBills: [],
-        foods: [],
-        others: [],
-        medecins: [],
-        clothsAndLeisure: [],
+        incomes: [] as Array<Item>,
+        rentAndBills: [] as Array<Item>,
+        foods: [] as Array<Item>,
+        others: [] as Array<Item>,
+        medecins: [] as Array<Item>,
+        clothsAndLeisure: [] as Array<Item>,
     },
+    shoppingLists: [] as Array<ShoppingList>,
     categories: {
         incomes: "Incomes",
         rentAndBills: "Rent and Bills",
@@ -136,5 +144,22 @@ export const addTo = (item: Item, category: string) => {
         }));
     }
 }
+
+export const addShoppingList = (shoppingList: ShoppingList) => {
+    const stateStore: any = useMarketStore.getState();
+    useMarketStore.setState((state: any) => ({
+        ...state,
+        shoppingLists: [...state.shoppingLists, shoppingList]
+    }));
+}
+// Function to delete a shopping list by its ID
+export const deleteShoppingList = (shoppingListId: string) => {
+    const stateStore: any = useMarketStore.getState();
+    const updatedLists = stateStore.shoppingLists.filter((list: ShoppingList) => list.id !== shoppingListId);
+    useMarketStore.setState((state: any) => ({
+        ...state,
+        shoppingLists: updatedLists
+    }));
+}   
 
 export default useMarketStore;
