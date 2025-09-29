@@ -5,6 +5,7 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Icon } from 'react-native-paper';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -28,6 +29,13 @@ export default function TabLayout() {
         options={{
           title: 'Explore',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="shop_menu"
+        options={{
+          title: 'Shopping',
+          tabBarIcon: ({ color }) => <Icon source={"cart"} size={28} color={color} />,
         }}
       />
     </Tabs>

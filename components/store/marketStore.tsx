@@ -1,31 +1,34 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
-import { persist as persistStorage, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { shallow } from "zustand/shallow";
+import { create } from "zustand";
+import { createJSONStorage, devtools, persist as persistStorage } from "zustand/middleware";
 
-type Item = {
+export type Item = {
     id:string;
     value: number;
-    description: string;
+    label: string;
     addedDate: string;
     category: string;
 }
-type ShoppingList = {
+export type ShoppingList = {
     id: string;
     name: string;
     items: Array<Item>;
     createdAt: string;
     totalAmount: number;
 }
+const initShoppingList: ShoppingList = { id: "", name: "", items: [], createdAt: "", totalAmount: 0 };
+const initItem: Item = { id: "", value: 0, label: "", addedDate: "", category: "" };
 const useMarketStore = create(devtools(persistStorage((set, get) => ({
+    currentShoppingListId: initShoppingList,
+    cureentItemId: initItem,
     market: {
         incomes: [] as Array<Item>,
         rentAndBills: [] as Array<Item>,
         foods: [] as Array<Item>,
         others: [] as Array<Item>,
         medecins: [] as Array<Item>,
-        clothsAndLeisure: [] as Array<Item>,
+        cloths: [] as Array<Item>,
+        leisure: [] as Array<Item>
     },
     shoppingLists: [] as Array<ShoppingList>,
     categories: {
@@ -34,15 +37,22 @@ const useMarketStore = create(devtools(persistStorage((set, get) => ({
         foods: "Foods",
         others: "Others",
         medecins: "Medecins",
-        clothsAndLeisure: "Cloths and Leisure"
+        cloths: "Cloths",
+        leisure:"Leisure"
     },
-    defaultCategories: ["Incomes", "Rent and Bills", "Foods", "Others", "Medecins", "Cloths and Leisure"],
+    defaultCategories: ["Incomes", "Rent and Bills", "Foods", "Others", "Medecins", "Cloths","Leisure"],
     totalOfSpending: 0,
     totalOfIncomes: 0,
     restAfterPaidBills: 0,
 
     setIncomes: (incomes: Array<Item>) => {
         set({ incomes: incomes })
+    },
+    setCurrentShoppingList: (shoppingList: ShoppingList | null) => {
+        set({ currentShoppingListId: shoppingList });
+    },
+    setCureentItem: (item: Item | null) => {
+        set({ cureentItemId: item });
     }
 }),
     { name: "market-storage", storage: createJSONStorage(() => AsyncStorage) }
@@ -147,6 +157,15 @@ export const addTo = (item: Item, category: string) => {
 
 export const addShoppingList = (shoppingList: ShoppingList) => {
     const stateStore: any = useMarketStore.getState();
+    const exists = stateStore.shoppingLists.some((list: ShoppingList) => list.id === shoppingList.id);
+    if (exists){
+        const newShoppingLists = stateStore.shoppingLists.filter((list: ShoppingList) => list.id !== shoppingList.id);
+        useMarketStore.setState((state: any) => ({
+            ...state,
+            shoppingLists: [...newShoppingLists, shoppingList]
+        }));
+        return;
+    } // Avoid adding duplicates
     useMarketStore.setState((state: any) => ({
         ...state,
         shoppingLists: [...state.shoppingLists, shoppingList]
