@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 //import ReanimatedSwipeable, { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
-import { Button, Icon } from 'react-native-paper';
+import { Button, Chip, Icon } from 'react-native-paper';
 
 const buttonWidth = Dimensions.get("window").width * 55 / 100;
 const Shopping = () => {
@@ -71,11 +71,12 @@ const Shopping = () => {
                     new shopping list
                 </Button>
             </View>
-            <View>
-                <Text style={{ margin: 25 }}>Shopping List Screen:
-                    <Icon source="currency-eur" size={14} />
-                    {showppingLists && showppingLists.reduce((acc: number, item: ShoppingList) => acc + item.totalAmount, 0).toFixed(2)}
+            <View style={{marginBottom:10}}>
+                <Chip mode="outlined" icon="currency-eur" style={{width:300,margin:"auto",}}>
+                  <Text style={{fontWeight:"bold", fontSize:15}}>
+                      {showppingLists && showppingLists.reduce((acc: number, item: ShoppingList) => acc + item.totalAmount, 0).toFixed(2)}
                 </Text>
+                </Chip>
             </View>
             <ScrollView style={{ height: Dimensions.get("window").height * 75 / 100 }}>
                 <View>
