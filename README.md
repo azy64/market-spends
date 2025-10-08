@@ -1,6 +1,12 @@
-# Welcome to your Expo app 👋
+# Welcome to Market-spends app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This app is about helping people to handle and follow all  your spends, by tracking everything 
+you are buying.
+
+![screenshot](./img11.jpeg) 
+![screenshot](./img12.jpeg)
+![screenshot](./img13.jpeg) 
+![screenshot](./img14.jpeg)  
 
 ## Get started
 
@@ -35,16 +41,25 @@ npm run reset-project
 
 This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
+## Authors
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+👤 **AZARIA SAIDI ALLY**
+- GitHub: [@azy64](https://github.com/azy64)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/azaria-saidi-524780112/)
 
-## Join the community
+## 🤝 Contributing
 
-Join our community of developers creating universal apps.
+Contributions, issues, and feature requests are welcome!
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Feel free to check the [issues page](../../issues/).
+
+Give a ⭐️ if you like this project!
+
+## Acknowledgments
+
+-  Cindy Shin in Behance.
+
+## 📝 License
+
+This project is [MIT](./MIT.md) licensed.

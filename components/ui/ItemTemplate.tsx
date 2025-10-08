@@ -1,56 +1,73 @@
 import { DancingScript_400Regular, DancingScript_700Bold, useFonts } from '@expo-google-fonts/dancing-script';
-import { useState } from 'react';
+import { useRef} from 'react';
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import { IconButton, Text } from 'react-native-paper';
+import ReanimatedSwipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
+import { Icon, IconButton, Text } from 'react-native-paper';
+import { Item } from '../store/marketStore';
 
 type ItemTemplateProps = {
-    label: string;
-    amount: number;
-    category: string;
-    createdAt: string;
     onDelete?: () => void;
+    onSwipeableOpen?: Function;
+    item: Item;
+    lastSelectedItem?: any;
+    setLastSelectedItem?: (selected: { id: string, ref: any }) => void;
 };
-const marginLeft=0;
+const marginLeft = 0;
 
-const ItemTemplate = ({label, amount, category,createdAt, onDelete}: ItemTemplateProps) => {
-    const [fontsLoaded,error] = useFonts({
+const ItemTemplate = ({ item, onDelete, onSwipeableOpen,lastSelectedItem,setLastSelectedItem }: ItemTemplateProps) => {
+    const [fontsLoaded, error] = useFonts({
         DancingScript_400Regular,
         DancingScript_700Bold
     });
-    const [marginLeftState,setMarginLeftState]= useState(marginLeft);
-    const gesture= Gesture.Pan().onTouchesMove(e=>{
-        onDelete && onDelete();
-        console.log("moving",e);
-    }).onEnd(e=>{
-        console.log("end",e);
-    });
+    const swipeRef = useRef<SwipeableMethods|null>(null);
+    /*const handlerSwipeSelected = (id: string) => {
+        if (lastSelectedItem)
+            if (lastSelectedItem.id !== id) lastSelectedItem.ref?.close();
+        setLastSelectedItem && setLastSelectedItem({ id: id, ref: swipeRef.current });
+        console.log("affectation reusiite...", ReanimatedSwipeable.name);
+    }
+    */
+    //const [marginLeftState, setMarginLeftState] = useState(marginLeft);
     return (
-
-        <TouchableOpacity style={[styles.container]} >
-            <View style={styles.transversal}>
-                <IconButton icon="close-thick"
-                    iconColor="red"
-                    size={16}
-                    onPress={() => onDelete && onDelete()}
-                />
-            </View>
-            <View style={styles.body}>
-                <Text style={styles.textFocusLeft}>{label}</Text>
-                <Text style={styles.textFocusRight}>
-                    <Text style={{fontFamily:'DancingScript_700Bold', fontStyle:'italic', fontSize:13}}>€</Text> 
-                    {amount.toFixed(2)}</Text>
-            </View>
-            <View style={styles.footer}>
-                <View style={styles.footerTextLeft}>
-                    <Text style={styles.textLeft}> {category}</Text>
+        
+        <ReanimatedSwipeable
+            ref={swipeRef}
+            onSwipeableOpen={(e) =>{
+                onSwipeableOpen && onSwipeableOpen(e);
+                swipeRef.current?.close();
+            }}
+            renderLeftActions={() =>
+                <View style={{ flex: 1, backgroundColor: "white", justifyContent: "center", alignItems: "center" }}>
+                    <Icon source="delete" size={33} color='red' />
                 </View>
-                <View style={styles.footerTextRight}>
-                    <Text style={styles.textRight} > {createdAt}</Text>
+            }
+            leftThreshold={20}
+        >
+            <TouchableOpacity style={[styles.container]} >
+                <View style={styles.transversal}>
+                    <IconButton icon="close-thick"
+                        iconColor="red"
+                        size={16}
+                        onPress={() => onDelete && onDelete()}
+                    />
                 </View>
+                <View style={styles.body}>
+                    <Text style={styles.textFocusLeft}>{item.label}</Text>
+                    <Text style={styles.textFocusRight}>
+                        <Text style={{ fontFamily: 'DancingScript_700Bold', fontStyle: 'italic', fontSize: 13 }}>€</Text>
+                        {item.value.toFixed(2)}</Text>
+                </View>
+                <View style={styles.footer}>
+                    <View style={styles.footerTextLeft}>
+                        <Text style={styles.textLeft}> {item.category}</Text>
+                    </View>
+                    <View style={styles.footerTextRight}>
+                        <Text style={styles.textRight} > {item.addedDate}</Text>
+                    </View>
 
-            </View>
-        </TouchableOpacity>
+                </View>
+            </TouchableOpacity>
+        </ReanimatedSwipeable>
     );
 }
 const styles = StyleSheet.create({
@@ -108,9 +125,9 @@ const styles = StyleSheet.create({
     },
     footerTextRight: {
         flex: 1,
-        justifyContent:"flex-end",
-        alignItems:"flex-end"
-        
+        justifyContent: "flex-end",
+        alignItems: "flex-end"
+
     },
     textLeft: {
         fontSize: 12,
@@ -119,7 +136,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#ccc",
         color: "#3d3b3bff",
         padding: 2,
-        width:"50%",
+        width: "50%",
     },
     textRight: {
         fontSize: 12,
@@ -128,7 +145,7 @@ const styles = StyleSheet.create({
         color: "#3d3b3bff",
         borderRadius: 6,
         padding: 2,
-        width:65,
+        width: 65,
     }
 });
 export default ItemTemplate;
