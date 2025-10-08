@@ -31,13 +31,14 @@ export default function TabLayout() {
         }}
       />
       */}
-      <Tabs.Screen
-        name="settings"
+       <Tabs.Screen
+        name="shop_menu"
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ color }) => <Icon size={28} source="cog-outline" color={color} />,
+          title: 'Shopping',
+          tabBarIcon: ({ color }) => <Icon source={"cart"} size={28} color={color} />,
         }}
       />
+     
       <Tabs.Screen
         name="graphic"
         options={{
@@ -46,10 +47,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="shop_menu"
+        name="settings"
         options={{
-          title: 'Shopping',
-          tabBarIcon: ({ color }) => <Icon source={"cart"} size={28} color={color} />,
+          title: 'Settings',
+          tabBarIcon: ({ color }) => <Icon size={28} source="cog-outline" color={color} />,
         }}
       />
     </Tabs>

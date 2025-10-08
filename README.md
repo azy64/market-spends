@@ -7,7 +7,7 @@ you are buying.
 ![screenshot](./img12.jpeg)
 ![screenshot](./img13.jpeg) 
 ![screenshot](./img14.jpeg)
-![screenshot](./img15.jpeg)
+![screenshot](./img1.jpeg)
 
 
 ## Get started
