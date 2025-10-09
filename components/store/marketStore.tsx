@@ -306,7 +306,16 @@ export const monthly = (monthFrom: string, monthTo: string): Array<any> => {
 export const createTheContentFile= async(fileName:string, content:string)=>{
   const fileUri = FileSystem.documentDirectory+fileName;
   FileSystem.writeAsStringAsync(fileUri,content);
-  console.log("file created:", fileUri);
+  //console.log('before:\n',content)
+ /* try{
+    const contentFile = await FileSystem.readAsStringAsync(fileUri);
+    console.log("file created:", fileUri);
+    console.log("file content:",contentFile);
+  }
+  catch(error){
+    console.error(error)
+  }
+  */
 }
 
 export default useMarketStore;
