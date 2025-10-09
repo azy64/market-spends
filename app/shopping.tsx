@@ -1,20 +1,41 @@
-import useMarketStore, { ShoppingList } from "@/components/store/marketStore";
+import SetCategories from "@/components/SetCategories";
+import useMarketStore, { createTheContentFile, Item, ShoppingList } from "@/components/store/marketStore";
 import ShoppingListTemplate from "@/components/ui/ShoppingListTemplate";
 import * as Crypto from 'expo-crypto';
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 //import ReanimatedSwipeable, { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
-import { Button, Chip, Icon } from 'react-native-paper';
+import { AnimatedFAB, Button, Chip } from 'react-native-paper';
 
 const buttonWidth = Dimensions.get("window").width * 55 / 100;
+const fabPosition = Dimensions.get("window").width*5/100;
 const Shopping = () => {
     const setCurrentShoppingList = useMarketStore((state: any) => state.setCurrentShoppingList);
     const currentShoppingListId = useMarketStore((state: any) => state.currentShoppingListId);
     const showppingLists = useMarketStore((state: any) => state.shoppingLists);
+    const [extended, setExtended]= useState(false);
     const nav = useRouter();
     const [lastShoppingSelected, setLastShoppingSelected] = useState<{ id: string, ref: any }>({ id: "", ref: null });
     const [currentSelectedId, setCurrentSelectedId] = useState("");
+    const [scroller,setScroller]= useState(0);
+    const download=()=>{
+        const fileName= "tunaweza-"+(new Date()).getTime()+".csv";
+        const content = showppingLists.map((shop:ShoppingList)=>{
+            const ligne =`${shop.id},${shop.totalAmount},${shop.createdAt}`;
+            shop.items.map((item:Item)=>{
+
+            })
+        })
+        createTheContentFile(fileName,"je suis là au milieur de vous");
+        alert("file:"+fileName+" has been created");
+    }
+    const onscroll=useCallback((event:any)=>{
+        const y =event.nativeEvent.contentOffset.y
+        if(scroller>y) setExtended(true);
+        else setExtended(false);
+        setScroller(y);
+    },[scroller]);
     const deleteShoppingList = (id: string) => {
         if (!id) return;
         const newShoppingLists = showppingLists.filter((list: any) => list.id !== id);
@@ -78,7 +99,7 @@ const Shopping = () => {
                 </Text>
                 </Chip>
             </View>
-            <ScrollView style={{ height: Dimensions.get("window").height * 75 / 100 }}>
+            <ScrollView onScroll={onscroll} style={{ height: Dimensions.get("window").height * 75 / 100 }}>
                 <View>
                     {showppingLists && showppingLists.map((item: any, index: number) => (
                         <ShoppingListTemplate item={item}
@@ -90,6 +111,16 @@ const Shopping = () => {
                     ))}
                 </View>
             </ScrollView>
+            <AnimatedFAB
+            icon="download-circle"
+            label={"Download"}
+            animateFrom={'left'}
+            iconMode={'dynamic'}
+            extended={extended}
+            onPress={()=>download()}
+            style={{position:"fixed", bottom:130, right:-fabPosition}}
+
+            />
         </View>
     );
 }

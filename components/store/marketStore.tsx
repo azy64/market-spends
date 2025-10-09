@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as FileSystem from 'expo-file-system/legacy';
 import { create } from "zustand";
 import {
   createJSONStorage,
@@ -302,5 +303,10 @@ export const monthly = (monthFrom: string, monthTo: string): Array<any> => {
   });
   return recolt;
 };
+export const createTheContentFile= async(fileName:string, content:string)=>{
+  const fileUri = FileSystem.documentDirectory+fileName;
+  FileSystem.writeAsStringAsync(fileUri,content);
+  console.log("file created:", fileUri);
+}
 
 export default useMarketStore;
